@@ -14,7 +14,7 @@ Installation
 
 Add this to your Gemfile: 
   
-    gem 'ignorable'
+    gem 'zt-ignorable'
 
 Usage
 =====
