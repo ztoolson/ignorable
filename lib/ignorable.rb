@@ -1,3 +1,4 @@
+require 'set'
 require 'active_record'
 require 'active_support/core_ext/class/attribute'
 
@@ -27,11 +28,14 @@ module Ignorable
     #
     #   Topic.new.respond_to?(:attributes) => false
     def ignore_columns(*columns)
-      self.ignored_columns ||= []
-      self.ignored_columns += columns.map(&:to_s)
+      self.ignored_columns ||= ::Set.new
+      columns.each do |column|
+        self.ignored_columns << column.to_s
+      end
+
       reset_column_information
       descendants.each(&:reset_column_information)
-      self.ignored_columns.tap(&:uniq!)
+      self.ignored_columns.to_a
     end
     alias ignore_column ignore_columns
 
@@ -39,9 +43,11 @@ module Ignorable
     # Accepts both ActiveRecord::ConnectionAdapter::Column objects,
     # and actual column names ('title')
     def ignored_column?(column)
-      self.ignored_columns.present? && self.ignored_columns.include?(
-        column.respond_to?(:name) ? column.name : column.to_s
-      )
+      return false unless self.ignored_columns.present?
+      return true if self.ignored_columns.include?(column.to_s)
+      return false unless column.respond_to?(:name)
+
+      self.ignored_columns.include?(column.name)
     end
 
     def reset_ignored_columns
