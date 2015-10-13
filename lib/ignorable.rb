@@ -15,7 +15,11 @@ module Ignorable
 
   module ClassMethods
     def columns # :nodoc:
-      @columns ||= super.reject{|col| ignored_column?(col)}
+      @columns ||= super.reject{ |col| ignored_column?(col.name)}
+    end
+
+    def ignored_columns
+      @ignored_columns ||= ::Set.new
     end
 
     # Prevent Rails from loading a table column.
@@ -28,9 +32,8 @@ module Ignorable
     #
     #   Topic.new.respond_to?(:attributes) => false
     def ignore_columns(*columns)
-      self.ignored_columns ||= ::Set.new
       columns.each do |column|
-        self.ignored_columns << column.to_s
+        self.ignored_columns << "#{column}"
       end
 
       reset_column_information
@@ -40,18 +43,13 @@ module Ignorable
     alias ignore_column ignore_columns
 
     # Has a column been ignored?
-    # Accepts both ActiveRecord::ConnectionAdapter::Column objects,
-    # and actual column names ('title')
+    # Accepts column names
     def ignored_column?(column)
-      return false unless self.ignored_columns.present?
-      return true if self.ignored_columns.include?(column.to_s)
-      return false unless column.respond_to?(:name)
-
-      self.ignored_columns.include?(column.name)
+      self.ignored_columns.include?(column.to_s)
     end
 
     def reset_ignored_columns
-      self.ignored_columns = []
+      self.ignored_columns = ::Set.new
       reset_column_information
     end
   end
@@ -60,5 +58,4 @@ end
 unless ActiveRecord::Base.include?(Ignorable::InstanceMethods)
   ActiveRecord::Base.send :include, Ignorable::InstanceMethods
   ActiveRecord::Base.send :extend, Ignorable::ClassMethods
-  ActiveRecord::Base.send :class_attribute, :ignored_columns
 end
