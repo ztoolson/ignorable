@@ -1,7 +1,4 @@
-source "https://rubygems.org"
-gemspec
+source 'https://rubygems.org'
 
-gem "rake"
-gem "rspec", ">= 2"
-gem "sqlite3", "~>1.3.10"
-gem "appraisal"
+# Specify your gem's dependencies in ignore_columns.gemspec
+gemspec

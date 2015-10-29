@@ -1,10 +1,6 @@
-require "bundler/setup"
-require "appraisal"
+require "bundler/gem_tasks"
+require "rspec/core/rake_task"
 
-task :default do
-  sh "rake appraisal:install && rake appraisal test"
-end
+RSpec::Core::RakeTask.new(:spec)
 
-require 'rspec/core/rake_task'
-desc 'Run the unit tests'
-RSpec::Core::RakeTask.new(:test)
+task :default => :spec
