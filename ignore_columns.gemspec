@@ -6,21 +6,13 @@ require 'ignore_columns/version'
 Gem::Specification.new do |spec|
   spec.name          = "ignore_columns"
   spec.version       = IgnoreColumns::VERSION
-  spec.authors       = ["Zach Toolson"]
-  spec.email         = ["zach.toolson@mx.com"]
+  spec.authors       = ["Nathaniel Jones", "Mando Escamilla", "Zach Toolson"]
+  spec.email         = ["nj@third.io", "", "zach.toolson@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Ignore columns in ActiveRecord models.}
+  spec.description   = %q{Ignore columns in ActiveRecord models.}
+  spec.homepage      = "http://github.com/ztoolson/ignore_columns"
   spec.license       = "MIT"
-
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
@@ -30,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec"
+  spec.add_development_dependency "activerecord", ">= 3"
 end
