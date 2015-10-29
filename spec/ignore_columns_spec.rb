@@ -39,30 +39,19 @@ describe IgnoreColumns do
     expect(Thing.column_names.sort).to eq ["id", "test_model_id", "value"]
   end
 
-  it 'removes columns from the subclass' do
-    expect(SubclassTestModel.column_names).to match_array(['id', 'name'])
-  end
-
   context 'when ignore_columns is called after the columns are loaded' do
     before do
       @test_model = Class.new(ActiveRecord::Base) do
         self.table_name = 'test_models'
       end
-      @subclass = Class.new(@test_model)
 
       # Force columns to load
       @test_model.columns
-      @subclass.columns
-
       @test_model.ignore_columns :attributes, :legacy
     end
 
     it 'removes columns from the class' do
       expect(@test_model.column_names).to match_array(['id', 'name'])
-    end
-
-    it 'removes columns from the subclass' do
-      expect(@subclass.column_names).to match_array(['id', 'name'])
     end
   end
 
